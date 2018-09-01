@@ -11,6 +11,7 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import java.awt.Color;
 
 
 public class Calculator extends JFrame {
@@ -53,11 +54,13 @@ public class Calculator extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 400, 550);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(0, 128, 128));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		
 		screen = new JTextField();
+		screen.setBackground(Color.WHITE);
 		screen.setHorizontalAlignment(SwingConstants.TRAILING);
 		screen.setFont(new Font("Tahoma", Font.BOLD, 34));
 		screen.setEditable(false);
@@ -213,6 +216,21 @@ public class Calculator extends JFrame {
 		contentPane.add(zerobt);
 		
 		JButton posbt = new JButton("+/-");
+		posbt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				screen.setText("-");
+				String num = screen.getText();
+				int result = Integer.parseInt(num);
+				
+				if(result > 0){
+					num = "-" + num;
+				}else{
+					num = num;
+				}
+				
+				screen.setText(num);
+			}
+		});
 		posbt.setFont(new Font("Tahoma", Font.BOLD, 20));
 		posbt.setBounds(105, 366, 85, 31);
 		contentPane.add(posbt);
@@ -220,8 +238,16 @@ public class Calculator extends JFrame {
 		final JButton dotbt = new JButton(".");
 		dotbt.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String num = screen.getText() + dotbt.getText();
-				screen.setText(num);
+				String num = screen.getText();
+				
+				if(num.contains(dotbt.getText())){
+					screen.setText("Error, . decimal");
+					return;
+				}else{
+					num = num + dotbt.getText();
+					screen.setText(num);
+				}
+			
 			}
 		});
 		dotbt.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -266,7 +292,7 @@ public class Calculator extends JFrame {
 			}
 		});
 		equalbt.setFont(new Font("Tahoma", Font.BOLD, 20));
-		equalbt.setBounds(10, 434, 370, 31);
+		equalbt.setBounds(106, 432, 274, 31);
 		contentPane.add(equalbt);
 		
 		JButton cbt = new JButton("C");
@@ -276,7 +302,7 @@ public class Calculator extends JFrame {
 			}
 		});
 		cbt.setFont(new Font("Tahoma", Font.BOLD, 20));
-		cbt.setBounds(10, 81, 85, 31);
+		cbt.setBounds(10, 432, 85, 31);
 		contentPane.add(cbt);
 	}
 }
