@@ -9,27 +9,34 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 
-// Created by Mohau Hlomeli
+// Created by Mohau
 // == 
 
 public class BattleCity extends Canvas implements Runnable {
 		
 	private static final long serialVersionUID = 1L;
-	public static final int WIDTH = 800; //SIZE of the width
+	public static final int WIDTH = 900; //SIZE of the width
 	public static final int HEIGHT = 700; //SIZE of the HEIGHT
 	public static String title = "Battle City version 1.0"; //TITLE of the game
 	boolean isRunning = false; // check if the game is running
 	public Thread thread; // Main Thread
 	public Player player;
+	
+	int blocks[] = new int[32 * 32]; // 1024 numbers/intergers
 	Random random = new Random();
+
 	
-	
-	BufferedImage image = new BufferedImage(650,610,BufferedImage.TYPE_INT_RGB);
+
+	BufferedImage image = new BufferedImage(650,665,BufferedImage.TYPE_INT_RGB);
 	int pixels[] = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 
 	
 	public BattleCity(){
 		player = new Player();
+		
+		for(int i=0;i<32 * 32;i++){ // 
+			blocks[i] = random.nextInt(0xffffff);
+		}
 	
 		
 	}
@@ -102,15 +109,20 @@ public class BattleCity extends Canvas implements Runnable {
 			return;
 		}
 		
-		for(int i=0;i<pixels.length;i++){
-			pixels[i] = random.nextInt(0xffffff);
+		for(int y=0;y<image.getHeight();y++){
+			
+			for(int x=0;x<image.getWidth();x++){
+				pixels[x + y * image.getWidth()] = blocks[x /64 + y/64 * 32];
+			}
+			
+		
 		}
 		
 		Graphics g = bs.getDrawGraphics();
 	
 		g.setColor(Color.black);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		g.drawImage(image, 50, 50, image.getWidth(), image.getHeight(),null);
+		g.drawImage(image,2, 2, image.getWidth(), image.getHeight(),null);
 		//player.render(g);
 		g.dispose();
 		bs.show();
