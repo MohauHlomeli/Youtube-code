@@ -1,6 +1,8 @@
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -12,7 +14,7 @@ import javax.swing.border.EmptyBorder;
 // Created by Mohau
 // == 
 
-public class BattleCity extends Canvas implements Runnable {
+public class BattleCity extends Canvas implements Runnable, KeyListener {
 		
 	private static final long serialVersionUID = 1L;
 	public static final int WIDTH = 900; //SIZE of the width
@@ -22,17 +24,27 @@ public class BattleCity extends Canvas implements Runnable {
 	public Thread thread; // Main Thread
 	public Player player;
 	
-	int blocks[] = new int[32 * 32]; // 1024 numbers/intergers
+	int blocks[] = new int[32 * 32]; //1024 numbers/intergers
 	Random random = new Random();
+	int x;
+	int y;
+	
+	public boolean keys[]= new boolean[150];
+	public boolean up,down,left,right;
 
 	
 
-	BufferedImage image = new BufferedImage(650,665,BufferedImage.TYPE_INT_RGB);
+	BufferedImage image = new BufferedImage(670,665,BufferedImage.TYPE_INT_RGB);
 	int pixels[] = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+	
+	
 
 	
 	public BattleCity(){
+	
 		player = new Player();
+		
+		addKeyListener(this);
 		
 		for(int i=0;i<32 * 32;i++){ // 
 			blocks[i] = random.nextInt(0xffffff);
@@ -66,6 +78,7 @@ public class BattleCity extends Canvas implements Runnable {
 	}
 	
 	public void run(){
+		setFocusable(true);
 		long lastTime = System.nanoTime(); // 
 		long timer = System.currentTimeMillis();
 		final double nanoseconds = 1000000000/60.0;  // im setting the desired FPS to 60 frames per second
@@ -89,7 +102,7 @@ public class BattleCity extends Canvas implements Runnable {
 				rate--;
 			}
 		
-			render();
+			render(x,y);
 			frames++;
 			
 			if(System.currentTimeMillis() - timer > 1000){
@@ -102,17 +115,26 @@ public class BattleCity extends Canvas implements Runnable {
 		stop();
 	}
 	
-	public void render(){
+	public void render(int xoff,int yoff){
 		BufferStrategy bs = getBufferStrategy();
 		if(bs == null){
 			createBufferStrategy(3);
 			return;
 		}
 		
+		int xy = 1;
+		int yy = 1;
+		
+		
 		for(int y=0;y<image.getHeight();y++){
-			
+		
+			yy = y + yoff;
+			//if(yy<0 || yy>=image.getHeight())break;
 			for(int x=0;x<image.getWidth();x++){
-				pixels[x + y * image.getWidth()] = blocks[x /64 + y/64 * 32];
+				xy = x + xoff;
+			pixels[x + y * image.getWidth()] = Sprite.dust.pixels[(x + y * image.getWidth())];
+			//pixels[x + y * image.getWidth()] = blocks[((xy /32) & 31) + ((yy/32) & 31) * 32];
+				//System.out.println(blocks[((xy /64) & 63) + ((yy/64) & 63) * 64]);
 			}
 			
 		
@@ -129,9 +151,39 @@ public class BattleCity extends Canvas implements Runnable {
 	}
 	
 	public void update(){
+		if(up)y-=2;
+		if(right)x+=2;
+		if(down)y+=2;
+		if(left)x-=2;
+	
 		player.x = 1;
 		player.y = 1; 
+		
 	//System.out.println("Update..");	
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if(e.getKeyCode()== KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) up = true;
+		if(e.getKeyCode()== KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) right = true;
+		if(e.getKeyCode()== KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN) down = true;
+		if(e.getKeyCode()== KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) left = true;
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if(e.getKeyCode()== KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP) up = false;
+		if(e.getKeyCode()== KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) right = false;
+		if(e.getKeyCode()== KeyEvent.VK_S || e.getKeyCode() == KeyEvent.VK_DOWN) down = false;
+		if(e.getKeyCode()== KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) left = false;
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
