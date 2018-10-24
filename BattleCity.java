@@ -9,6 +9,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.util.Random;
 
+import javax.swing.JButton;
+
 
 // Created by Mohau
 // == 
@@ -33,7 +35,7 @@ public class BattleCity extends Canvas implements Runnable,KeyListener {
 	
 	int xpos = 1,ypos= 1;
 	int updates = 0;
-
+	
 	
 
 	BufferedImage image = new BufferedImage(650,665,BufferedImage.TYPE_INT_RGB);
@@ -59,7 +61,6 @@ public class BattleCity extends Canvas implements Runnable,KeyListener {
 		isRunning = true;
 		thread = new Thread(this,"Game Thread");
 		thread.start();
-	
 	}
 	
 	public synchronized void stop(){
@@ -81,8 +82,6 @@ public class BattleCity extends Canvas implements Runnable,KeyListener {
 		final double nanoseconds = 1000000000/60.0;  // im setting the desired FPS to 60 frames per second
 		int frames = 0;
 		double rate = 0;
-		
-		// All this variables are declared b4 we enter our main Game loop (While Loop)
 		
 		requestFocus();
 		while(isRunning){ // while our game is running, we will keep on updating and rendering to the screen
@@ -133,7 +132,7 @@ public class BattleCity extends Canvas implements Runnable,KeyListener {
 			for(int x=0;x<image.getWidth();x++){
 				int xx = x + xpos;
 				if(xx < 0 || xx>WIDTH)continue;
-				pixels[x + y * image.getWidth()] = Sprite.bricks[((xx/4)&3) + ((yy/4) & 3) * 64];
+				pixels[x + y * image.getWidth()] = Sprite.bricks[((xx/6)&5) + ((yy/6) & 5) * 64];
 			}
 		
 		}
@@ -154,10 +153,10 @@ public class BattleCity extends Canvas implements Runnable,KeyListener {
 	}
 	
 	public void update(){
-		if(up)ypos--;
-		if(right)xpos++;
-		if(down)ypos++;
-		if(left)xpos--;
+		if(up)ypos-=2;
+		if(right)xpos+=2;
+		if(down)ypos+=2;
+		if(left)xpos-=2;
 	
 		player.x = 1;
 		player.y = 1; 

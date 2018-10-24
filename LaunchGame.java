@@ -1,6 +1,9 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -11,7 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 
-public class LaunchGame extends JFrame implements Runnable {
+public class LaunchGame extends JFrame implements Runnable, MouseListener, MouseMotionListener{
 
 	
 	private static final long serialVersionUID = 1L;
@@ -23,22 +26,26 @@ public class LaunchGame extends JFrame implements Runnable {
 	BufferedImage image = new BufferedImage(650,665,BufferedImage.TYPE_INT_RGB);
 	int pixels[] = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 	
+	int MouseXpos, MouseYpos;
+	
 	
 	public LaunchGame(){
 	
 		panel = new JPanel();
+		addMouseListener(this);
+		addMouseMotionListener(this);
+		
 		add(panel);
 		setTitle(BattleCity.title);
 		setSize(WIDTH,HEIGHT);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
+		setUndecorated(true);
 		setVisible(true);
-		
 		start();
 		
 	}
-	
 	
 	public synchronized void start(){
 		if(isRunning){
@@ -91,7 +98,7 @@ public class LaunchGame extends JFrame implements Runnable {
 			
 			if(System.currentTimeMillis() - timer > 1000){
 				timer+=1000;
-				System.out.println(updates + " ups" + "  " +  frames + " fps");
+				//System.out.println(updates + " ups" + "  " +  frames + " fps");
 				updates = 0;
 				frames = 0;
 			}
@@ -126,6 +133,116 @@ public class LaunchGame extends JFrame implements Runnable {
 		g.drawString("HELP",305,130);
 		g.drawString("SETTINGS",275,160);
 		g.drawString("EXIT GAME",250,190);
+		
+		if(MouseXpos>=250 && MouseXpos<472 && MouseYpos <71 && MouseYpos>=40){
+			g.setColor(new Color(255,255,255));
+			g.drawString("PLAY GAME",250,70);
+			
+			try {
+				g.drawImage(ImageIO.read(LaunchGame.class.getResource("/bullet.png")),165,55,50,15,null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			g.setColor(new Color(238,249,38));
+			g.drawString("OPTIONS",280,100);
+			g.drawString("HELP",305,130);
+			g.drawString("SETTINGS",275,160);
+			g.drawString("EXIT GAME",250,190);
+		}
+		
+		if(MouseXpos>=280 && MouseXpos<438 && MouseYpos <100 && MouseYpos>=83){
+			g.setColor(new Color(255,255,255));
+			g.drawString("OPTIONS",280,100);
+			
+			try {
+				g.drawImage(ImageIO.read(LaunchGame.class.getResource("/bullet.png")),165,85,50,15,null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			g.setColor(new Color(238,249,38));
+			g.drawString("PLAY GAME",250,70);
+			g.drawString("HELP",305,130);
+			g.drawString("SETTINGS",275,160);
+			g.drawString("EXIT GAME",250,190);
+		}
+		
+		if(MouseXpos>=280 && MouseXpos<438 && MouseYpos <100 && MouseYpos>=83){
+			g.setColor(new Color(255,255,255));
+			g.drawString("OPTIONS",280,100);
+			
+			try {
+				g.drawImage(ImageIO.read(LaunchGame.class.getResource("/bullet.png")),165,85,50,15,null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			g.setColor(new Color(238,249,38));
+			g.drawString("PLAY GAME",250,70);
+			g.drawString("HELP",305,130);
+			g.drawString("SETTINGS",275,160);
+			g.drawString("EXIT GAME",250,190);
+		}
+		
+		
+		if(MouseXpos>=306 && MouseXpos<404 && MouseYpos <130 && MouseYpos>=114){
+			g.setColor(new Color(255,255,255));
+			g.drawString("HELP",305,130);
+			
+			try {
+				g.drawImage(ImageIO.read(LaunchGame.class.getResource("/bullet.png")),165,115,50,15,null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			g.setColor(new Color(238,249,38));
+			g.drawString("PLAY GAME",250,70);
+			g.drawString("OPTIONS",280,100);
+			g.drawString("SETTINGS",275,160);
+			g.drawString("EXIT GAME",250,190);
+		}
+		
+		if(MouseXpos>=276 && MouseXpos<454 && MouseYpos <159 && MouseYpos>=143){
+			g.setColor(new Color(255,255,255));
+			g.drawString("SETTINGS",275,160);
+			
+			try {
+				g.drawImage(ImageIO.read(LaunchGame.class.getResource("/bullet.png")),165,145,50,15,null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			g.setColor(new Color(238,249,38));
+			g.drawString("PLAY GAME",250,70);
+			g.drawString("OPTIONS",280,100);
+			g.drawString("HELP",305,130);
+			g.drawString("EXIT GAME",250,190);
+		}
+		
+		
+		
+		
+		
+		
+		
+		if(MouseXpos>=250 && MouseXpos<461 && MouseYpos <191 && MouseYpos>=173){
+			g.setColor(new Color(255,255,255));
+			g.drawString("EXIT GAME",250,190);
+			
+			try {
+				g.drawImage(ImageIO.read(LaunchGame.class.getResource("/bullet.png")),165,174,50,15,null);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			g.setColor(new Color(238,249,38));
+			g.drawString("PLAY GAME",250,70);
+			g.drawString("OPTIONS",280,100);
+			g.drawString("HELP",305,130);
+			g.drawString("SETTINGS",275,160);
+		}
+		
 
 		g.dispose();
 		bs.show();
@@ -137,4 +254,51 @@ public class LaunchGame extends JFrame implements Runnable {
 		new LaunchGame();
 	}
 
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		
+	}
+
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		MouseXpos = e.getX();
+		MouseYpos = e.getY();
+		System.out.println("MouseX :" + MouseXpos + "  " + "MouseY :" +MouseYpos);
+		
+	}
+
+
+	public void mouseClicked(MouseEvent e) {
+		if(MouseXpos>=250 && MouseXpos<472 && MouseYpos <71 && MouseYpos>=40){
+			new RunGame();
+		}
+		
+		if(MouseXpos>=250 && MouseXpos<461 && MouseYpos <191 && MouseYpos>=173){
+			System.exit(0);
+		}
+		
+	}
+
+
+	public void mouseEntered(MouseEvent arg0) {
+		
+	}
+
+
+	public void mouseExited(MouseEvent arg0) {
+		
+	}
+
+
+	public void mousePressed(MouseEvent arg0) {
+		
+	}
+
+	public void mouseReleased(MouseEvent arg0) {
+	
+	}
+
 }
+
